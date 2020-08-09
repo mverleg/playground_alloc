@@ -20,30 +20,38 @@ impl <'a> Park<'a> {
         }
     }
 
-    pub fn add_dog(&'a mut self, dog: Doggo) -> &'a mut Doggo {
-        let allocdog = self.arena.alloc(dog);
-        self.dogs.push(allocdog);
-        allocdog
-    }
+    // pub fn add_dog(&'a mut self, dog: Doggo) -> &'a mut Doggo {
+    //     let allocdog = self.arena.alloc(dog);
+    //     self.dogs.push(allocdog);
+    //     allocdog
+    // }
 }
 
 fn main() {
     g(f());
 }
 
-fn f<'a>() -> Park<'a> {
-    let mut park = Park::new();
+fn f<'a>() -> Vec<&'a mut Doggo> {
+    // Create a new arena to bump allocate into.
+    let bump = Bump::new();
 
-    park.add_dog(Doggo {
-        cuteness: u64::max_value(),
-        age: 8,
-    });
+    // Allocate values into the arena.
+    let dogs = vec![
+        bump.alloc(Doggo {
+            cuteness: u64::max_value(),
+            age: 8,
+        }),
+        bump.alloc(Doggo {
+            cuteness: 9001,
+            age: 2,
+        }),
+    ];
 
-    park
+    dogs
 }
 
-fn g(park: Park) {
-    for dog in park.dogs {
+fn g(dogs: Vec<&mut Doggo>) {
+    for dog in dogs {
         println!(">> {:?}", dog);
     }
 }
