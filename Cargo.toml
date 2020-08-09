@@ -8,3 +8,5 @@ edition = "2018"
 
 [dependencies]
 bumpalo = "^3.4.0"
+smallvec = "^1.4.1"
+ustr = "^0.7.0"
